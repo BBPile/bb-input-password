@@ -35,14 +35,13 @@
                       label="Password"
                       show-value
                       required
+                      maxlength="20"
+                      size="20"
                       password-pattern="^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{8,}$"
-                      original-password-label="Password"
-                      confirm-password-label="Confirm"
+                      password-label="Password"
                       >
-                      <iron-icon prefix prefix-top icon="icons:lock" ></iron-icon>
-                      <iron-icon prefix prefix-bottom icon="icons:lock" ></iron-icon>
-                      <paper-icon-button class="clear" suffix suffix-top icon="icons:clear" onclick="_clearInput(event)" alt="clear" title="clear" ></paper-icon-button>
-                      <paper-icon-button class="clear" suffix suffix-bottom icon="icons:clear" onclick="_clearInput(event)" alt="clear" title="clear" ></paper-icon-button>
+                      <iron-icon prefix icon="icons:lock" ></iron-icon>
+                      <paper-icon-button id="original" class="clear" suffix icon="icons:clear" onclick="_clearInput(event)" alt="clear" title="clear" ></paper-icon-button>
                 </bb-input-password>
                 <paper-button raised id="setValue" onclick="clickMe(event)">Set password</paper-button>
                 <!-- Submit and Reset for form -->
@@ -59,7 +58,7 @@
     </div>
 
     <script>
-        function _loadMain(e) {
+        function _loadMain(event) {
           eventsDemo.addEventListener('change', function(event) {
             // Validate the entire form to see if we should enable the `Submit` button.
             eventsDemoSubmit.disabled = !eventsDemo.validate();
@@ -72,24 +71,18 @@
             this.querySelector('.output').innerHTML = JSON.stringify(event.detail);
           });
 
-          inputPw.addEventListener('bb-input-password-error-message',function (e) {
+          document.getElementById('inputPw').addEventListener('bb-input-password-error-message',function (event) {
             var msg = '';
-            console.log(e.detail.code); // true
+            console.log(event.detail.code); // true
 
-            if(e.detail.code == 'error-original-invalid'){
+            if(event.detail.code == 'error-original-invalid') {
               msg= 'First password is invalid.';
             }
-            else if(e.detail.code == 'error-confirm-invalid'){
-              msg= 'Confirm password is invalid.';
-            }
-            else if(e.detail.code == 'error-not-matched'){
+            else if(event.detail.code == 'error-not-matched') {
               msg= 'Nothing matched with the first password.';
             }
-            else if(e.detail.code == 'error-original-null'){
+            else if(event.detail.code == 'error-original-null') {
               msg= 'First password must be existed.';
-            }
-            else if(e.detail.code == 'error-confirm-null'){
-              msg= 'Confirm password must be existed.';
             }
             document.getElementById('inputPw').setAttribute('error-message',msg);
           });
@@ -107,24 +100,17 @@
         }
 
         function _reset(event) {
-          var form = Polymer.dom(event).localTarget.parentElement
+          var form = Polymer.dom(event).localTarget.parentElement;
           form.reset();
           form.querySelector('.output').innerHTML = '';
         }
 
-
-
-
         function clickMe(event) {
-
-          inputPw.setValue = 'dnjsWns31#';
-
+          document.getElementById('inputPw').value = 'dnjsWns31#';
         }
 
-
-        function _clearInput(event){
-            inputPw.value = '';
-
+        function _clearInput(event) {
+          document.getElementById('inputPw').clearPassword();
         }
 
     </script>
